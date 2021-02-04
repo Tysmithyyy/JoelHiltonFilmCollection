@@ -1,0 +1,21 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "New Movie Added";
+}
+
+@model JoelHiltonFilmCollection.Models.NewMovieResponse
+
+<div>
+    <h2>Thank you for submitting a new movie.</h2>
+    @if (Model.Title == "Independence Day")
+    {
+        @:Unfortunately, "Independence Day" most likely won't show up on the movie list because "Rocky IV" is the "Most American Movie Ever Made".
+    }
+    else
+    {
+        @:"@Model.Title" will be added to the list.
+    }
+    <p>You can view the list <a asp-controller="Home" asp-action="MovieList">here</a>.</p>
+</div>
