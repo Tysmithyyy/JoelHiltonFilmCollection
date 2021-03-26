@@ -1,4 +1,5 @@
 ﻿using JoelHiltonFilmCollection.Models;
+using JoelHiltonFilmCollection.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,9 +14,16 @@ namespace JoelHiltonFilmCollection.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private IJoelHiltonFilmCollectionRepository _repository;
+
+        private JoelHiltonFilmCollectionDbContext context { get; set; }
+
+        public HomeController(ILogger<HomeController> logger, IJoelHiltonFilmCollectionRepository repository, JoelHiltonFilmCollectionDbContext con)
         {
             _logger = logger;
+
+            _repository = repository;
+            context = con;
         }
 
         public IActionResult Index()
@@ -35,15 +43,72 @@ namespace JoelHiltonFilmCollection.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMovie(NewMovieResponse appResponse)
+        public IActionResult AddMovie(Movie movie)
         {
-            MovieListStorage.AddMovie(appResponse);
-            return View("Confirmation", appResponse);
+            if (ModelState.IsValid)
+            {
+                //update data entered is valid, if not, return the asp-validation summary
+                if (movie.Title == "Independence Day")
+                {
+
+                }
+                else
+                {
+                    context.Movies.Add(movie);
+                    context.SaveChanges();
+                }
+
+            }
+            return View("Confirmation", movie);
+        }
+
+        [HttpPost]
+        public IActionResult EditMovie(Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                var old = context.Movies.Where(t => t.MovieId == movie.MovieId).FirstOrDefault();
+                context.Movies.Remove(old);
+                //update data entered is valid, if not, return the asp-validation summary
+                if (movie.Title == "Independence Day")
+                {
+
+                }
+                else
+                {
+                    context.Movies.Add(movie);
+                    context.SaveChanges();
+                }
+
+            }
+            return View("EditConfirmation", movie);
         }
 
         public IActionResult MovieList()
         {
-            return View(MovieListStorage.Movies);
+            //return the list of all movies
+            return View(new MovieListViewModel
+            {
+                Movies = _repository.Movies
+                    .OrderBy(t => t.Title)
+            });
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int MovieID)
+        {
+            var movie = context.Movies.Where(t => t.MovieId == MovieID).FirstOrDefault();
+
+            return View("EditMovie", movie);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int MovieId)
+        {
+            var movie = context.Movies.Where(t => t.MovieId == MovieId).FirstOrDefault();
+            context.Movies.Remove(movie);
+            context.SaveChanges();
+            return RedirectToAction("MovieList");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

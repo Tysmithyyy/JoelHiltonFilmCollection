@@ -1,0 +1,51 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "Edit Movie";
+}
+
+@model Movie
+
+<form class="w-25 p-3" asp-action="EditMovie" method="post">
+    <input type="hidden" name="MovieId" asp-for="MovieId" value="@Model.MovieId" required />
+    <div class="form-group">
+        <label asp-for="Title">Movie Title:</label>
+        <input class="form-control" type="text" name="Title" asp-for="Title" value="@Model.Title" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Category">Category:</label>
+        <input class="form-control" type="text" name="Category" asp-for="Category" value="@Model.Category" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Year">Year:</label>
+        <input class="form-control" type="text" name="Year" asp-for="Year" value="@Model.Year" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Director">Director:</label>
+        <input class="form-control" type="text" name="Director" asp-for="Director" value="@Model.Director" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Rating">Rating:</label>
+        <select class="form-control" name="Rating" id="Rating" asp-for="Rating" value="@Model.Rating" required>
+            <option value="G">G</option>
+            <option value="PG">PG</option>
+            <option value="PG-13">PG-13</option>
+            <option value="R">R</option>
+            <option value="NR">NR</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Edited">Edited?</label>
+        <input type="checkbox" name="Edited" asp-for="Edited" value="@Model.Edited" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Lent">Lent To:</label>
+        <input class="form-control" type="text" name="Lent" asp-for="Lent" value="@Model.Lent" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes">Notes:</label>
+        <textarea class="form-control" asp-for="Notes" maxlength="25" value="@Model.Notes">Type Notes Here...</textarea>
+    </div>
+    <button class="btn btn-success" type="submit">Save Changes</button>
+</form>

@@ -5,18 +5,27 @@
     ViewBag.Title = "Movie List";
 }
 
-@model IEnumerable<JoelHiltonFilmCollection.Models.NewMovieResponse>
+@model MovieListViewModel
 
 <div>
     <h2>Joel's Collection</h2>
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Category</th><th>Title</th><th>Year</th><th>Director</th><th>Rating</th><th>Edited</th><th>Lent To</th><th>Notes</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Year</th>
+                <th>Director</th>
+                <th>Rating</th>
+                <th>Edited</th>
+                <th>Lent To</th>
+                <th>Notes</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (JoelHiltonFilmCollection.Models.NewMovieResponse x in Model)
+            @foreach (Movie x in Model.Movies)
             {
                 if (x.Title == "Independence Day")
                 {
@@ -24,9 +33,28 @@
                 }
                 else
                 {
-                    <tr>
-                        <td>@x.Category</td><td>@x.Title</td><td>@x.Year</td><td>@x.Director</td><td>@x.Rating</td><td>@x.Edited</td><td>@x.Lent</td><td>@x.Notes</td>
-                    </tr>
+            <tr>
+                <td>@x.Title</td>
+                <td>@x.Category</td>
+                <td>@x.Year</td>
+                <td>@x.Director</td>
+                <td>@x.Rating</td>
+                <td>@x.Edited</td>
+                <td>@x.Lent</td>
+                <td>@x.Notes</td>
+                <td>
+                    <form id="@x.MovieId" asp-action="Edit" method="post">
+                        <input type="hidden" value="@x.MovieId" name="MovieId"/>
+                        <button class="btn btn-primary" type="submit">Edit</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="@x.MovieId" asp-action="Delete" method="post">
+                        <input type="hidden" value="@x.MovieId" name="MovieId" />
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
                 }
             }
         </tbody>
